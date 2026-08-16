@@ -1,0 +1,6 @@
+# dsh-tool-brush — bundle patch: activation row for the profile layer.
+# Registers the `brush` tool (real bash-compatible Rust shell)
+# so every agent in the profile can run bash commands natively on Windows.
+- insert:
+    - id: tool-brush
+      name: 'dsh-tool-brush'
