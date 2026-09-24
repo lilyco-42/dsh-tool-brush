@@ -27,10 +27,33 @@ process with `-c`, so bash scripts behave like bash — not like an alias simula
 ## Install
 
 ```sh
-dsh plugin --profile web add /path/to/dsh-tool-brush
+# Recommended — works out of the box
+dsh plugin --profile web add github:lilyco-42/dsh-tool-brush
 ```
 
 Restart `dsh web`. The `brush` tool appears in every agent's catalog.
+
+### Installing from a local checkout
+
+`dsh plugin add <path>` installs through pnpm's `link:` protocol, so the profile points at your checkout instead of copying it. Node then resolves this plugin's `@deepseek-ai/*` imports from the **checkout's** directory tree, which never reaches the profile's `node_modules` — and the plugin fails to load with:
+
+```
+Cannot find package '@deepseek-ai/schemastery' imported from <checkout>/lib/index.js
+```
+
+Make dsh's own modules reachable from the checkout (Windows, no admin required):
+
+```powershell
+New-Item -ItemType Junction `
+  -Path "<checkout>\node_modules\@deepseek-ai" `
+  -Target "$env:USERPROFILE\.dsh\profiles\node_modules\@deepseek-ai"
+
+dsh plugin --profile web add <checkout>
+```
+
+`<DSH_HOME>\profiles\node_modules\@deepseek-ai` is the directory dsh provisions itself (one link per in-box package, ~240 of them), so the plugin resolves the **same module instances** dsh is running.
+
+> Do not "fix" this with a plain `pnpm install` inside the checkout. It pulls a second copy of `@deepseek-ai/dsh-tools`, `dsh-llm`, … into the checkout. The plugin then loads, but `instanceof HarnessError` and `Symbol()`-keyed lookups compare against a different module instance than the host's.
 
 ## Requirements
 
