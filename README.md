@@ -1,10 +1,10 @@
 # dsh-tool-brush
 
-**Model-facing [brush](https://brush.sh) shell tool for DeepSeek Harness â€” real bash syntax on Windows, no Nushell translation layer.**
+**Model-facing [brush](https://brush.sh) shell tool for DeepSeek Harness â€?real bash syntax on Windows, no Nushell translation layer.**
 
 Registers a `brush` tool for every agent in the profile. Each call runs a fresh
 [brush](https://brush.sh) (Bo[u]rn[e] RUsty SHell, a Rust-native bash-compatible shell)
-process with `-c`, so bash scripts behave like bash â€” not like an alias simulator.
+process with `-c`, so bash scripts behave like bash â€?not like an alias simulator.
 
 ## Why
 
@@ -13,7 +13,7 @@ process with `-c`, so bash scripts behave like bash â€” not like an alias simula
 - `dsh-tool-nu` emulates bash with Nushell aliases, which breaks on real bash syntax
   (`x=1`, `$(cmd)`, `2>&1`, `for ... do ... done`, `&&` / `||`, ...).
 - brush is a **real bash implementation**: variables, command substitution, pipelines,
-  redirection, control flow, functions, arrays, arithmetic â€” all native.
+  redirection, control flow, functions, arrays, arithmetic â€?all native.
 
 ## Features
 
@@ -22,12 +22,12 @@ process with `-c`, so bash scripts behave like bash â€” not like an alias simula
 - Git for Windows coreutils on PATH when available:
   `ls`, `cat`, `grep`, `wc`, `tr`, `head`, `tail`, `tee`, `xargs`, `find`, `sed`, `awk`, ...
 - Fresh shell per call (`--no-config`): deterministic, no state leakage
-- Background jobs, sandbox escalation, spill, timeout â€” same contract as other shell tools
+- Background jobs, sandbox escalation, spill, timeout â€?same contract as other shell tools
 
 ## Install
 
 ```sh
-# Recommended â€” works out of the box
+# Recommended â€?works out of the box
 dsh plugin --profile web add github:lilyco-42/dsh-tool-brush
 ```
 
@@ -35,7 +35,7 @@ Restart `dsh web`. The `brush` tool appears in every agent's catalog.
 
 ### Installing from a local checkout
 
-`dsh plugin add <path>` installs through pnpm's `link:` protocol, so the profile points at your checkout instead of copying it. Node then resolves this plugin's `@deepseek-ai/*` imports from the **checkout's** directory tree, which never reaches the profile's `node_modules` â€” and the plugin fails to load with:
+`dsh plugin add <path>` installs through pnpm's `link:` protocol, so the profile points at your checkout instead of copying it. Node then resolves this plugin's `@deepseek-ai/*` imports from the **checkout's** directory tree, which never reaches the profile's `node_modules` â€?and the plugin fails to load with:
 
 ```
 Cannot find package '@deepseek-ai/schemastery' imported from <checkout>/lib/index.js
@@ -53,7 +53,7 @@ dsh plugin --profile web add <checkout>
 
 `<DSH_HOME>\profiles\node_modules\@deepseek-ai` is the directory dsh provisions itself (one link per in-box package, ~240 of them), so the plugin resolves the **same module instances** dsh is running.
 
-> Do not "fix" this with a plain `pnpm install` inside the checkout. It pulls a second copy of `@deepseek-ai/dsh-tools`, `dsh-llm`, â€¦ into the checkout. The plugin then loads, but `instanceof HarnessError` and `Symbol()`-keyed lookups compare against a different module instance than the host's.
+> Do not "fix" this with a plain `pnpm install` inside the checkout. It pulls a second copy of `@deepseek-ai/dsh-tools`, `dsh-llm`, â€?into the checkout. The plugin then loads, but `instanceof HarnessError` and `Symbol()`-keyed lookups compare against a different module instance than the host's.
 
 ## Requirements
 
